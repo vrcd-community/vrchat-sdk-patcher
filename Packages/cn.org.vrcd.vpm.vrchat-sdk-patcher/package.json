@@ -2,5 +2,22 @@
     "name": "cn.org.vrcd.vpm.vrchat-sdk-patcher",
     "displayName": "VRChat SDK Patcher",
     "version": "0.0.1",
-    "hideInEditor": false
+    "hideInEditor": false,
+    "description": "提供一系列改进 VRChat SDK 使用体验（主要针对于网络）的补丁。",
+    "unity": "2019.4",
+    "author": {
+        "email": "us@vrcd.org.cn",
+        "name": "VRCD",
+        "url": "https://vrcd.org.cn"
+    },
+    "changelogUrl": "https://github.com/vrcd-community/vrchat-sdk-patcher/releases",
+    "documentationUrl": "https://github.com/vrcd-community/vrchat-sdk-patcher",
+    "license": "MIT",
+    "licensesUrl": "https://github.com/vrcd-community/vrchat-sdk-patcher/blob/main/LICENSE",
+    "keywords": [
+        "vrchat"
+    ],
+    "vpmDependencies": {
+        "com.vrchat.base": ">=3.4.0"
+    }
 }
