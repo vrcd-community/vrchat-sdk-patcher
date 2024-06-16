@@ -1,0 +1,6 @@
+﻿[filter "usharp-prefab"]
+smudge = powershell .gitscripts/filter-usharp-assets.ps1
+clean = powershell .gitscripts/filter-usharp-assets.ps1
+
+[diff "usharp-prefab"]
+textconv = powershell .gitscripts/filter-usharp-assets.ps1

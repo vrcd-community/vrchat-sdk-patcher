@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<engine:UXML
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:engine="UnityEngine.UIElements"
+    xmlns:editor="UnityEditor.UIElements"
+    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd">
+    <Style
+        src="project://database/Packages/cn.org.vrcd.vpm.vrchat-sdk-patcher/Editor/Views/PatcherSettings.uss?fileID=7433441132597879392&amp;guid=eddc19e8fdcaab447972277fe51671a1&amp;type=3#PatcherSettings" />
+
+    <engine:VisualElement class="settings-container">
+        <engine:Label class="section-title" text="VRChat SDK Patcher" />
+        <engine:Box>
+            <engine:Label text="Use at your own risk!" />
+        </engine:Box>
+        <engine:Label text="Made By Love!" />
+        <engine:Label class="section-title" text="Http Proxy Settings" />
+        <engine:Toggle name="proxy-toggle" label="Use Proxy" />
+        <engine:TextField name="proxy-uri-field" label="Proxy Uri" />
+        <engine:Label class="section-title" text="Others" />
+        <!-- <engine:Toggle name="replace-upload-url-toggle" -->
+        <!--                text="Replace 'vrchat.com' in upload url to 'api.vrchat.cloud' when upload" /> -->
+        <engine:Label text="Replace 'vrchat.com' in upload url to 'api.vrchat.cloud' when upload" />
+    </engine:VisualElement>
+</engine:UXML>
