@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
+using VRC.SDKBase.Editor.Source.Helpers;
 
 namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Editor.Views
 {
@@ -15,6 +16,8 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Editor.Views
 
         private Toggle _replaceUploadUrlToggle;
 
+        private Button _reloadSdkButton;
+
         [MenuItem("VRChat SDK Patcher/Settings")]
         public static void ShowSettings()
         {
@@ -26,19 +29,26 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Editor.Views
         {
             var root = rootVisualElement;
             var content = m_VisualTreeAsset.Instantiate();
+
             root.Add(content);
+
+            minSize = new Vector2(430, 600);
 
             _httpProxyUriField = content.Query<TextField>("proxy-uri-field").First();
             _useProxyToggle = content.Query<Toggle>("proxy-toggle").First();
 
-            // _replaceUploadUrlToggle = content.Query<Toggle>("replace-upload-url-toggle").First();
+            _replaceUploadUrlToggle = content.Query<Toggle>("replace-upload-url-toggle").First();
+
+            _reloadSdkButton = content.Query<Button>("reload-sdk-button").First();
 
             LoadSettings();
 
             _httpProxyUriField.RegisterValueChangedCallback(_ => SaveSettings());
             _useProxyToggle.RegisterValueChangedCallback(_ => SaveSettings());
 
-            // _replaceUploadUrlToggle.RegisterValueChangedCallback(_ => SaveSettings());
+            _replaceUploadUrlToggle.RegisterValueChangedCallback(_ => SaveSettings());
+
+            _reloadSdkButton.clicked += () => ReloadUtil.ReloadSDK();
         }
 
         private void LoadSettings()
@@ -48,7 +58,7 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Editor.Views
             _useProxyToggle.value = _settings.UseProxy;
             _httpProxyUriField.value = _settings.HttpProxyUri;
 
-            // _replaceUploadUrlToggle.value = _settings.ReplaceUploadUrl;
+            _replaceUploadUrlToggle.value = _settings.ReplaceUploadUrl;
         }
 
         private void SaveSettings()

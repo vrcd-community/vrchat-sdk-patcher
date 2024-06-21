@@ -1,7 +1,9 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using HarmonyLib;
+using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
 using VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers;
@@ -11,7 +13,7 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor
     [InitializeOnLoad]
     internal class PatcherMain
     {
-        private const string HARMONY_ID = "cn.org.vrcd.vpm.upload-endpoint-patcher.harmony";
+        private const string HARMONY_ID = "cn.org.vrcd.vpm.vrchat-sdk-patcher.harmony";
 
         public static Settings PatcherSettings;
 
@@ -23,12 +25,12 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor
             var packageAssembly = Assembly.GetExecutingAssembly();
 
             // ugly, but it works
-            var patchers = new IPatcher[]
-            {
-                new UploadEndpointPatcher()
-            };
+            var patchersToLoad = new List<IPatcher>();
 
-            foreach (var patcher in patchers)
+            if (PatcherSettings.ReplaceUploadUrl)
+                patchersToLoad.Add(new UploadEndpointPatcher());
+
+            foreach (var patcher in patchersToLoad)
             {
                 patcher.Patch(harmony);
             }

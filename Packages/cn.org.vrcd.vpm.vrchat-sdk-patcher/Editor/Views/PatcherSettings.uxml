@@ -18,8 +18,9 @@
         <engine:Toggle name="proxy-toggle" label="Use Proxy" />
         <engine:TextField name="proxy-uri-field" label="Proxy Uri" />
         <engine:Label class="section-title" text="Others" />
-        <!-- <engine:Toggle name="replace-upload-url-toggle" -->
-        <!--                text="Replace 'vrchat.com' in upload url to 'api.vrchat.cloud' when upload" /> -->
-        <engine:Label text="Replace 'vrchat.com' in upload url to 'api.vrchat.cloud' when upload" />
+        <engine:HelpBox text="Change these settings require reload VRChat SDK" message-type="Warning"/>
+        <engine:Toggle name="replace-upload-url-toggle"
+                       text="Replace 'vrchat.com' in upload url to 'api.vrchat.cloud' when upload" />
+        <engine:Button name="reload-sdk-button" text="Reload VRChat SDK" />
     </engine:VisualElement>
 </engine:UXML>
