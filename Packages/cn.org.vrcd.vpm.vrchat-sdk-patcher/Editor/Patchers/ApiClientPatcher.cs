@@ -13,7 +13,8 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers
         {
             request.RemoveHeader("X-MacAddress");
 
-            request.Proxy = new HTTPProxy(new Uri(PatcherMain.PatcherSettings.HttpProxyUri));
+            if (PatcherMain.PatcherSettings.UseProxy)
+                request.Proxy = new HTTPProxy(new Uri(PatcherMain.PatcherSettings.HttpProxyUri));
         }
     }
 }
