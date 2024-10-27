@@ -2,7 +2,8 @@
     "name": "VRCD.VRChatPackages.VRChatSDKPatcher.Worlds.Editor",
     "rootNamespace": "VRCD.VRChatPackages.VRChatSDKPatcher.Worlds.Editor",
     "references": [
-        "VRC.SDKBase.Editor"
+        "VRC.SDKBase.Editor",
+        "VRC.SDK3.Editor"
     ],
     "includePlatforms": [
         "Editor"
