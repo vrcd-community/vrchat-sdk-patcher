@@ -17,11 +17,14 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers
             var handler = new HttpClientHandler
             {
                 UseProxy = PatcherMain.PatcherSettings.UseProxy,
-                Proxy = string.IsNullOrWhiteSpace(PatcherMain.PatcherSettings.HttpProxyUri)
-                    ? null
-                    : new WebProxy(PatcherMain.PatcherSettings.HttpProxyUri),
                 CookieContainer = cookies
             };
+
+            if (!string.IsNullOrWhiteSpace(PatcherMain.PatcherSettings.HttpProxyUri) &&
+                PatcherMain.PatcherSettings.UseProxy)
+            {
+                handler.Proxy = new WebProxy(PatcherMain.PatcherSettings.HttpProxyUri);
+            }
 
             var httpClient = new HttpClient(handler);
 
