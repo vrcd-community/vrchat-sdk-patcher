@@ -1,0 +1,81 @@
+name: Create Package
+
+on:
+  push:
+  workflow_call:
+    outputs:
+      unityPackageArtifact:
+        description: "Artifact name of unity package"
+        value: ${{ jobs.create_package.outputs.unityPackage }}
+      zipArtifact:
+        description: "Artifact name of zip file"
+        value: ${{ jobs.create_package.outputs.zipFile }}
+      version:
+        description: "Version of the package"
+        value: ${{ jobs.create_package.outputs.version }}
+
+jobs:
+  create_package:
+    strategy:
+      matrix:
+        packages: ["cn.org.vrcd.vpm.vrchat-sdk-patcher","cn.org.vrcd.vpm.vrchat-sdk-patcher.worlds"]
+    runs-on: ubuntu-latest
+    env:
+      packagePath: Packages/${{ matrix.packages }}
+    outputs:
+      unityPackage: ${{ steps.write_output.outputs.unityPackage }}
+      zipFile: ${{ steps.write_output.outputs.zipFile }}
+      version: ${{ steps.write_output.outputs.version }}
+    steps:
+      # Checkout Local Repository
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Get the Package version based on the package.json file
+      - name: Get Version
+        id: version
+        uses: zoexx/github-action-json-file-properties@d02f28167f05bf70cd75352b11c25a4e8c39bf38
+        with:
+          file_path: "${{ env.packagePath }}/package.json"
+          prop_path: "version"
+
+      # Configure the Environment Variables needed for releasing the Package
+      - name: Set Environment Variables
+        run: |
+          echo "zipFile=${{ matrix.packages }}-${{ steps.version.outputs.value }}".zip >> $GITHUB_ENV
+          echo "unityPackage=${{ matrix.packages }}-${{ steps.version.outputs.value }}.unitypackage" >> $GITHUB_ENV
+          echo "version=${{ steps.version.outputs.value }}" >> $GITHUB_ENV
+
+      # Zip the Package for release
+      - name: Create Package Zip
+        working-directory: "${{ env.packagePath }}"
+        run: zip -r "${{ github.workspace }}/${{ env.zipFile }}" .
+
+      # Build a list of .meta files for future use
+      - name: Track Package Meta Files
+        run: find "${{ env.packagePath }}/" -name \*.meta >> metaList
+
+      # Make a UnityPackage version of the Package for release
+      - name: Create UnityPackage
+        uses: pCYSl5EDgo/create-unitypackage@b5c57408698b1fab8b3a84d4b67f767b8b7c0be9
+        with:
+          package-path: ${{ env.unityPackage }}
+          include-files: metaList
+
+      - name: Upload .unitypackage
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.unityPackage }}
+          path: ${{ env.unityPackage }}
+
+      - name: Upload .zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.zipFile }}
+          path: ${{ env.zipFile }}
+
+      - id: write_output
+        run: |
+          echo "zipFile=${{env.zipFile}}" >> $GITHUB_OUTPUT
+          echo "unityPackage=${{env.unityPackage}}" >> $GITHUB_OUTPUT
+          echo "version=${{env.version}}" >> $GITHUB_OUTPUT
