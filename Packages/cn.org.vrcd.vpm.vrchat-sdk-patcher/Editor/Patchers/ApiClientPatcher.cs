@@ -1,7 +1,6 @@
 ﻿using System;
 using BestHTTP;
 using HarmonyLib;
-using VRC;
 using VRC.Core;
 
 namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers
@@ -13,7 +12,7 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers
         {
             request.RemoveHeader("X-MacAddress");
 
-            if (PatcherMain.PatcherSettings.UseProxy)
+            if (PatcherMain.PatcherSettings.UseProxy && !string.IsNullOrWhiteSpace(PatcherMain.PatcherSettings.HttpProxyUri))
                 request.Proxy = new HTTPProxy(new Uri(PatcherMain.PatcherSettings.HttpProxyUri));
         }
     }

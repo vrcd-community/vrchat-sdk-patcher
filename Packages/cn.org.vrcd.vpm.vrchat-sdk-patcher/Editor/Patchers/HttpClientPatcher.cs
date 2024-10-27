@@ -13,8 +13,6 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers
     {
         private static bool Prefix(ref HttpClient __result, string url)
         {
-            Debug.Log("Patching GetClient method");
-
             var cookies = GetCookies(url);
             var handler = new HttpClientHandler
             {
