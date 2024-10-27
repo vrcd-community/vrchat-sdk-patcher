@@ -13,29 +13,43 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor
     [InitializeOnLoad]
     internal class PatcherMain
     {
-        private const string HARMONY_ID = "cn.org.vrcd.vpm.vrchat-sdk-patcher.harmony";
+        private const string HarmonyID = "cn.org.vrcd.vpm.vrchat-sdk-patcher.harmony";
 
-        public static Settings PatcherSettings;
+        public static readonly Settings PatcherSettings;
 
         static PatcherMain()
         {
             PatcherSettings = Settings.LoadSettings();
 
-            var harmony = new Harmony(HARMONY_ID);
-            var packageAssembly = Assembly.GetExecutingAssembly();
+            var harmony = new Harmony(HarmonyID);
+            var packageAssembles = new List<Assembly> { Assembly.GetExecutingAssembly() };
 
-            // ugly, but it works
-            var patchersToLoad = new List<IPatcher>();
+            if (Type.GetType("VRCD.VRChatPackages.VRChatSDKPatcher.Worlds.Editor.PatcherLocator") is
+                { } worldPatchLocator)
+            {
+                Debug.Log("Found World Patcher");
+                packageAssembles.Add(worldPatchLocator.Assembly);
+            }
 
-            if (PatcherSettings.ReplaceUploadUrl)
-                patchersToLoad.Add(new UploadEndpointPatcher());
+            var patchersToLoad = packageAssembles.SelectMany(assembly => assembly.GetTypes())
+                .Where(type => type.IsClass && type.GetInterfaces().Contains(typeof(IPatcher)))
+                .Select(type => (IPatcher) Activator.CreateInstance(type))
+                .ToList();
+
+            if (!PatcherSettings.ReplaceUploadUrl)
+                patchersToLoad.Remove(patchersToLoad.Find(patcher => patcher.GetType() == typeof(UploadEndpointPatcher)));
 
             foreach (var patcher in patchersToLoad)
             {
+                Debug.Log($"Loading Patcher: {patcher.GetType().Name}");
                 patcher.Patch(harmony);
             }
 
-            harmony.PatchAll(packageAssembly);
+            foreach (var assembly in packageAssembles)
+            {
+                Debug.Log($"Loading Patcher Assembly: {assembly.GetName().Name}");
+                harmony.PatchAll(assembly);
+            }
 
             Debug.Log("Patcher Loaded!");
         }
