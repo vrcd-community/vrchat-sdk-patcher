@@ -24,11 +24,14 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor
             var harmony = new Harmony(HarmonyID);
             var packageAssembles = new List<Assembly> { Assembly.GetExecutingAssembly() };
 
-            if (Type.GetType("VRCD.VRChatPackages.VRChatSDKPatcher.Worlds.Editor.PatcherLocator") is
-                { } worldPatchLocator)
+            try
             {
-                Debug.Log("Found World Patcher");
-                packageAssembles.Add(worldPatchLocator.Assembly);
+                packageAssembles.Add(Assembly.Load("VRCD.VRChatPackages.VRChatSDKPatcher.Worlds.Editor"));
+                Debug.Log("Found World Patcher Assembly");
+            }
+            catch
+            {
+                // ignored
             }
 
             var patchersToLoad = packageAssembles.SelectMany(assembly => assembly.GetTypes())
