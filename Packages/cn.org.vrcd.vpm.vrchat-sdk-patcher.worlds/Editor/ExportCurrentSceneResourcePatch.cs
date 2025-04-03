@@ -45,9 +45,12 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Worlds.Editor
             var stringConcatWithThreeArgsMethodInfo = AccessTools.Method(typeof(string),
                 nameof(string.Concat),
                 new[] { typeof(string), typeof(string), typeof(string) });
+            var stringConcatWithArrayArgMethodInfo = AccessTools.Method(typeof(string),
+                nameof(string.Concat),
+                new[] { typeof(string[]) });
             var assetBundlePathConcatIndex = codes.FindIndex(code =>
                 code.opcode == OpCodes.Call && code.operand is MethodInfo callMethodInfo &&
-                callMethodInfo == stringConcatWithThreeArgsMethodInfo);
+                (callMethodInfo == stringConcatWithThreeArgsMethodInfo || callMethodInfo == stringConcatWithArrayArgMethodInfo));
 
             if (assetBundlePathConcatIndex == -1)
             {
