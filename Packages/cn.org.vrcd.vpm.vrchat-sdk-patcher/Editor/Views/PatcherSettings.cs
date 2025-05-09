@@ -1,3 +1,4 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -17,6 +18,9 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Editor.Views
         private Toggle _replaceUploadUrlToggle;
 
         private Button _reloadSdkButton;
+
+        private HelpBox _proxyUriValidationHelpBox;
+        private HelpBox _proxySystemHelpBox;
 
         [MenuItem("VRChat SDK Patcher/Settings")]
         public static void ShowSettings()
@@ -41,6 +45,9 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Editor.Views
 
             _reloadSdkButton = content.Query<Button>("reload-sdk-button").First();
 
+            _proxyUriValidationHelpBox = content.Query<HelpBox>("proxy-uri-validation").First();
+            _proxySystemHelpBox = content.Query<HelpBox>("proxy-system").First();
+
             LoadSettings();
 
             _httpProxyUriField.RegisterValueChangedCallback(_ => SaveSettings());
@@ -59,6 +66,14 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Editor.Views
             _httpProxyUriField.value = _settings.HttpProxyUri;
 
             _replaceUploadUrlToggle.value = _settings.ReplaceUploadUrl;
+
+            _proxyUriValidationHelpBox.style.display = !string.IsNullOrWhiteSpace(_settings.HttpProxyUri) && !IsValidUri(_settings.HttpProxyUri)
+                ? DisplayStyle.Flex
+                : DisplayStyle.None;
+
+            _proxySystemHelpBox.style.display = _settings.UseProxy && string.IsNullOrWhiteSpace(_settings.HttpProxyUri)
+                ? DisplayStyle.Flex
+                : DisplayStyle.None;
         }
 
         private void SaveSettings()
@@ -68,7 +83,23 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Editor.Views
 
             _settings.ReplaceUploadUrl = _replaceUploadUrlToggle.value;
 
+            _proxyUriValidationHelpBox.style.display = !string.IsNullOrWhiteSpace(_settings.HttpProxyUri) && !IsValidUri(_settings.HttpProxyUri)
+                ? DisplayStyle.Flex
+                : DisplayStyle.None;
+
+            _proxySystemHelpBox.style.display = _settings.UseProxy && string.IsNullOrWhiteSpace(_settings.HttpProxyUri)
+                ? DisplayStyle.Flex
+                : DisplayStyle.None;
+
             _settings.Save();
+        }
+
+        private static bool IsValidUri(string uri)
+        {
+            if (!Uri.TryCreate(uri, UriKind.Absolute, out var url))
+                return false;
+
+            return url.Scheme == Uri.UriSchemeHttp || url.Scheme == Uri.UriSchemeHttps;
         }
     }
 }
