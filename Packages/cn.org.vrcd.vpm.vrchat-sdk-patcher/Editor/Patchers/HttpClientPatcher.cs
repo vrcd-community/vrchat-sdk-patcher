@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
 using HarmonyLib;
+using JetBrains.Annotations;
 using UnityEngine;
 using VRC.SDKBase.Editor.Api;
 
@@ -11,8 +13,21 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers
     [HarmonyPatch(typeof(VRCApi), "GetClient")]
     internal class UseProxyPatcher
     {
+        [CanBeNull] private static HttpClient _httpClient;
+        [CanBeNull] private static HttpClientHandler _httpClientHandler;
+
+        [CanBeNull] private static WebProxy _webProxy;
+
         private static bool Prefix(ref HttpClient __result, string url)
         {
+            if (_httpClient != null && _httpClientHandler != null)
+            {
+                _httpClientHandler.Proxy = GetProxy();
+
+                __result = _httpClient;
+                return false;
+            }
+
             var cookies = GetCookies(url);
             var handler = new HttpClientHandler
             {
@@ -23,7 +38,7 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers
             if (!string.IsNullOrWhiteSpace(PatcherMain.PatcherSettings.HttpProxyUri) &&
                 PatcherMain.PatcherSettings.UseProxy)
             {
-                handler.Proxy = new WebProxy(PatcherMain.PatcherSettings.HttpProxyUri);
+                handler.Proxy = GetProxy();
             }
 
             var httpClient = new HttpClient(handler);
@@ -36,6 +51,9 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers
             {
                 httpClient.DefaultRequestHeaders.Add(headerName, headerValue);
             }
+
+            _httpClient = httpClient;
+            _httpClientHandler = handler;
 
             __result = httpClient;
 
@@ -56,6 +74,24 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers
                 typeof(VRCApi).GetField("Headers", BindingFlags.NonPublic | BindingFlags.Static);
 
             return (Dictionary<string, string>)headersFeild.GetValue(null);
+        }
+
+        [CanBeNull]
+        private static WebProxy GetProxy()
+        {
+            if (string.IsNullOrWhiteSpace(PatcherMain.PatcherSettings.HttpProxyUri) ||
+                !PatcherMain.PatcherSettings.UseProxy) return null;
+
+            if (_webProxy != null)
+            {
+                _webProxy.Address = new Uri(PatcherMain.PatcherSettings.HttpProxyUri);
+            }
+            else
+            {
+                _webProxy = new WebProxy(PatcherMain.PatcherSettings.HttpProxyUri);
+            }
+
+            return _webProxy;
         }
     }
 }
