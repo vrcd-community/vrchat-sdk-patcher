@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
+using BestHTTP;
 using HarmonyLib;
 using JetBrains.Annotations;
 using VRC.SDKBase.Editor.Api;

@@ -15,6 +15,7 @@
         <engine:Label class="section-title" text="Http Proxy Settings" />
         <engine:HelpBox text="Turn on Use Proxy Toggle with empty Proxy Uri will use system proxy settings (If you are using Linux, it only follow env var `HTTP_PROXY` `http_proxy` `no_proxy` `NO_PROXY`)" message-type="Info"/>
         <engine:HelpBox name="proxy-system" message-type="Info" text="Will use System Proxy" />
+        <engine:HelpBox text="System Proxy Detect won't work on MacOS for VRChat API Client (BestHTTP one, no .NET HttpClient one)" message-type="Warning" />
         <engine:Toggle name="proxy-toggle" label="Use Proxy" />
         <engine:TextField name="proxy-uri-field" label="Proxy Uri" />
         <engine:HelpBox name="proxy-uri-validation" message-type="Error" text="Invalid URI format. Please enter a valid HTTP or HTTPS URL." />
