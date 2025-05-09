@@ -13,7 +13,7 @@
         <engine:Box>
             <engine:Label text="Use at your own risk!" />
         </engine:Box>
-        <engine:Label text="Made By Love!" />
+        <engine:Label text="Made With Love!" />
         <engine:Label class="section-title" text="Http Proxy Settings" />
         <engine:Toggle name="proxy-toggle" label="Use Proxy" />
         <engine:TextField name="proxy-uri-field" label="Proxy Uri" />
