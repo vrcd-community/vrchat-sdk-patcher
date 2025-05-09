@@ -27,7 +27,7 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers
             _httpClient = null;
             _httpClientHandler = null;
 
-            var cookies = GetCookies(url);
+            var cookies = GetCookies();
             var handler = new HttpClientHandler
             {
                 UseProxy = PatcherMain.PatcherSettings.UseProxy,
@@ -55,12 +55,19 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers
             return false; // Skip original GetHttpClient method
         }
 
-        private static CookieContainer GetCookies(string url)
+        private static CookieContainer GetCookies()
         {
             var getCookiesMethod =
                 typeof(VRCApi).GetMethod("GetCookies", BindingFlags.NonPublic | BindingFlags.Static);
 
+            var url = GetVrcCookieBaseUrl();
+
             return (CookieContainer)getCookiesMethod.Invoke(null, new object[] { url });
+        }
+
+        private static Uri GetVrcCookieBaseUrl()
+        {
+            return AccessTools.Field(typeof(VRCApi), "VRC_COOKIE_BASE_URL").GetValue(null) as Uri;
         }
 
         private static Dictionary<string, string> GetHeaders()
