@@ -39,9 +39,6 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor
                 .Select(type => (IPatcher) Activator.CreateInstance(type))
                 .ToList();
 
-            if (!PatcherSettings.ReplaceUploadUrl)
-                patchersToLoad.Remove(patchersToLoad.Find(patcher => patcher.GetType() == typeof(UploadEndpointPatcher)));
-
             foreach (var patcher in patchersToLoad)
             {
                 Debug.Log($"Loading Patcher: {patcher.GetType().Name}");

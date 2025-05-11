@@ -76,6 +76,9 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers
 
         public void Patch(Harmony harmony)
         {
+            if (!PatcherMain.PatcherSettings.ReplaceUploadUrl)
+                return;
+
             var transpilerMethod =
                 typeof(UploadEndpointPatcher).GetMethod(nameof(Transpiler),
                     BindingFlags.Static | BindingFlags.NonPublic);

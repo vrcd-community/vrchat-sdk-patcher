@@ -16,6 +16,7 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Editor.Views
         private Toggle _useProxyToggle;
 
         private Toggle _replaceUploadUrlToggle;
+        private Toggle _skipCopyrightAgreementToggle;
 
         private Button _reloadSdkButton;
 
@@ -42,6 +43,7 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Editor.Views
             _useProxyToggle = content.Query<Toggle>("proxy-toggle").First();
 
             _replaceUploadUrlToggle = content.Query<Toggle>("replace-upload-url-toggle").First();
+            _skipCopyrightAgreementToggle = content.Query<Toggle>("skip-copyright-agreement-toggle").First();
 
             _reloadSdkButton = content.Query<Button>("reload-sdk-button").First();
 
@@ -66,6 +68,7 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Editor.Views
             _httpProxyUriField.value = _settings.HttpProxyUri;
 
             _replaceUploadUrlToggle.value = _settings.ReplaceUploadUrl;
+            _skipCopyrightAgreementToggle.value = _settings.SkipCopyrightAgreement;
 
             _proxyUriValidationHelpBox.style.display = !string.IsNullOrWhiteSpace(_settings.HttpProxyUri) && !IsValidUri(_settings.HttpProxyUri)
                 ? DisplayStyle.Flex
@@ -82,6 +85,7 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Editor.Views
             _settings.HttpProxyUri = _httpProxyUriField.value;
 
             _settings.ReplaceUploadUrl = _replaceUploadUrlToggle.value;
+            _settings.SkipCopyrightAgreement = _skipCopyrightAgreementToggle.value;
 
             _proxyUriValidationHelpBox.style.display = !string.IsNullOrWhiteSpace(_settings.HttpProxyUri) && !IsValidUri(_settings.HttpProxyUri)
                 ? DisplayStyle.Flex

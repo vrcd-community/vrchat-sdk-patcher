@@ -10,7 +10,8 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor
         public bool UseProxy { get; set; } = true;
         public string HttpProxyUri { get; set; } = "";
 
-        public bool ReplaceUploadUrl { get; set; } = true;
+        public bool ReplaceUploadUrl { get; set; }
+        public bool SkipCopyrightAgreement { get; set; }
 
         public const string SettingsFileName = "settings.json";
 

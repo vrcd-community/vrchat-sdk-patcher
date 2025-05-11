@@ -20,6 +20,9 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers
 
         public void Patch(Harmony harmony)
         {
+            if (!PatcherMain.PatcherSettings.SkipCopyrightAgreement)
+                return;
+
             var copyrightAgreementType = AccessTools.TypeByName(CopyrightAgreementTypeName);
 
             if (copyrightAgreementType == null)
