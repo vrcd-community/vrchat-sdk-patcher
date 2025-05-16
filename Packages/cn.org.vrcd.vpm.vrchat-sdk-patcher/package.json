@@ -1,10 +1,10 @@
 {
     "name": "cn.org.vrcd.vpm.vrchat-sdk-patcher",
     "displayName": "VRChat SDK Patcher",
-    "version": "0.4.0",
+    "version": "0.4.1",
     "hideInEditor": false,
     "description": "提供一系列改进 VRChat SDK 使用体验（主要针对于网络）的补丁。",
-    "unity": "2019.4",
+    "unity": "2022.3",
     "author": {
         "email": "us@vrcd.org.cn",
         "name": "VRCD",
@@ -18,6 +18,6 @@
         "vrchat"
     ],
     "vpmDependencies": {
-        "com.vrchat.base": ">=3.4.0"
+        "com.vrchat.base": ">=3.5.0"
     }
 }
