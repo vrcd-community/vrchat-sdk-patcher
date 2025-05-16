@@ -1,0 +1,20 @@
+{
+    "name": "VRCD.VRChatPackages.VRChatSDKPatcher.Avatars.Editor",
+    "rootNamespace": "VRCD.VRChatPackages.VRChatSDKPatcher.Avatars.Editor",
+    "references": [
+        "VRC.SDKBase.Editor",
+        "VRCD.VRChatPackages.VRChatSDKPatcher.Editor",
+        "VRC.SDK3A.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
