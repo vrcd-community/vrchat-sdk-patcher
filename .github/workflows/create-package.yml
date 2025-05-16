@@ -18,7 +18,7 @@ jobs:
   create_package:
     strategy:
       matrix:
-        packages: ["cn.org.vrcd.vpm.vrchat-sdk-patcher","cn.org.vrcd.vpm.vrchat-sdk-patcher.worlds"]
+        packages: ["cn.org.vrcd.vpm.vrchat-sdk-patcher","cn.org.vrcd.vpm.vrchat-sdk-patcher.worlds","cn.org.vrcd.vpm.vrchat-sdk-patcher.avatars"]
     runs-on: ubuntu-latest
     env:
       packagePath: Packages/${{ matrix.packages }}
