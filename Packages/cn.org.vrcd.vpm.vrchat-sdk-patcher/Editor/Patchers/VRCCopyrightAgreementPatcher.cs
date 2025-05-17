@@ -10,6 +10,9 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers
 
         private static bool Prefix(ref Task<bool> __result)
         {
+            if (!PatcherMain.PatcherSettings.SkipCopyrightAgreement)
+                return false;
+
             __result = Task.FromResult(true);
 
             Debug.LogWarning(
@@ -20,9 +23,6 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers
 
         public void Patch(Harmony harmony)
         {
-            if (!PatcherMain.PatcherSettings.SkipCopyrightAgreement)
-                return;
-
             var copyrightAgreementType = AccessTools.TypeByName(CopyrightAgreementTypeName);
 
             if (copyrightAgreementType == null)
