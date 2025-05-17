@@ -11,7 +11,7 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers
         private static bool Prefix(ref Task<bool> __result)
         {
             if (!PatcherMain.PatcherSettings.SkipCopyrightAgreement)
-                return false;
+                return true;
 
             __result = Task.FromResult(true);
 

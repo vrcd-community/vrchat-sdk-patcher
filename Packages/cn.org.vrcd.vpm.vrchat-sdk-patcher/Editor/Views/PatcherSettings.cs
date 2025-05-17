@@ -57,6 +57,8 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Editor.Views
 
             _replaceUploadUrlToggle.RegisterValueChangedCallback(_ => SaveSettings());
 
+            _skipCopyrightAgreementToggle.RegisterValueChangedCallback(_ => SaveSettings());
+
             _reloadSdkButton.clicked += () => ReloadUtil.ReloadSDK();
         }
 
