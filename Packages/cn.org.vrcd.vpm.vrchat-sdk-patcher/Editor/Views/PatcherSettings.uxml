@@ -20,12 +20,13 @@
         <engine:TextField name="proxy-uri-field" label="Proxy Uri" />
         <engine:HelpBox name="proxy-uri-validation" message-type="Error" text="Invalid URI format. Please enter a valid HTTP or HTTPS URL." />
         <engine:Label class="section-title" text="Others" />
-        <engine:HelpBox text="Change following settings require reload VRChat SDK" message-type="Warning"/>
-        <engine:Toggle name="replace-upload-url-toggle"
-                       text="Replace 'vrchat.com' in upload url to 'api.vrchat.cloud' when upload" />
         <engine:HelpBox text="By using this patch, you agree that you have already read and accepted the VRChat copyright agreement." message-type="Warning"/>
         <engine:Toggle name="skip-copyright-agreement-toggle"
                        text="Skip copyright agreement dialog" />
+        <engine:Label class="section-title" text="Settings require Reload SDK" />
+        <engine:HelpBox text="Change following settings require reload VRChat SDK" message-type="Warning"/>
+        <engine:Toggle name="replace-upload-url-toggle"
+                       text="Replace 'vrchat.com' in upload url to 'api.vrchat.cloud' when upload" />
         <engine:Button name="reload-sdk-button" text="Reload VRChat SDK" />
     </engine:VisualElement>
 </engine:UXML>
