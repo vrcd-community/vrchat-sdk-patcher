@@ -1,32 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <engine:UXML
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:engine="UnityEngine.UIElements"
-    xmlns:editor="UnityEditor.UIElements"
-    xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd">
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:engine="UnityEngine.UIElements"
+        xsi:noNamespaceSchemaLocation="../../../../UIElementsSchema/UIElements.xsd">
     <Style
-        src="project://database/Packages/cn.org.vrcd.vpm.vrchat-sdk-patcher/Editor/Views/PatcherSettings.uss?fileID=7433441132597879392&amp;guid=eddc19e8fdcaab447972277fe51671a1&amp;type=3#PatcherSettings" />
+            src="project://database/Packages/cn.org.vrcd.vpm.vrchat-sdk-patcher/Editor/Views/PatcherSettings.uss?fileID=7433441132597879392&amp;guid=eddc19e8fdcaab447972277fe51671a1&amp;type=3#PatcherSettings"/>
 
     <engine:VisualElement class="settings-container">
-        <engine:Label class="section-title" text="VRChat SDK Patcher" />
-        <engine:HelpBox text="Use at your own risk!" message-type="Warning" />
-        <engine:Label text="Made With Love!" />
-        <engine:Label class="section-title" text="Http Proxy Settings" />
-        <engine:HelpBox text="Turn on Use Proxy Toggle with empty Proxy Uri will use system proxy settings (If you are using Linux, it only follow env var `HTTP_PROXY` `http_proxy` `no_proxy` `NO_PROXY`)" message-type="Info"/>
-        <engine:HelpBox name="proxy-system" message-type="Info" text="Will use System Proxy" />
-        <engine:HelpBox text="System Proxy Detect won't work on MacOS for VRChat API Client (BestHTTP one, no .NET HttpClient one)" message-type="Warning" />
-        <engine:Toggle name="proxy-toggle" label="Use Proxy" />
-        <engine:TextField name="proxy-uri-field" label="Proxy Uri" />
-        <engine:HelpBox name="proxy-uri-validation" message-type="Error" text="Invalid URI format. Please enter a valid HTTP or HTTPS URL." />
-        <engine:Label class="section-title" text="Others" />
-        <engine:HelpBox text="By using this patch, you agree that you have already read and accepted the VRChat copyright agreement." message-type="Warning"/>
+        <engine:Label class="section-title" text="VRChat SDK Patcher"/>
+        <engine:HelpBox text="Use at your own risk!" message-type="Warning"/>
+        <engine:Label text="Made With Love!"/>
+        <engine:Label class="section-title" text="Http Proxy Settings"/>
+        <engine:HelpBox
+                text="Turn on Use Proxy Toggle with empty Proxy Uri will use system proxy settings (If you are using Linux, it only follow env var `HTTP_PROXY` `http_proxy` `no_proxy` `NO_PROXY`)"
+                message-type="Info"/>
+        <engine:HelpBox name="proxy-system" message-type="Info" text="Will use System Proxy"/>
+        <engine:HelpBox
+                text="System Proxy Detect won't work on MacOS for VRChat API Client (BestHTTP one, no .NET HttpClient one)"
+                message-type="Warning"/>
+        <engine:Toggle name="proxy-toggle" label="Use Proxy"/>
+        <engine:TextField name="proxy-uri-field" label="Proxy Uri"/>
+        <engine:HelpBox name="proxy-uri-validation" message-type="Error"
+                        text="Invalid URI format. Please enter a valid HTTP or HTTPS URL."/>
+        <engine:Label class="section-title" text="Others"/>
+        <engine:HelpBox
+                text="By using this patch, you agree that you have already read and accepted the VRChat copyright agreement."
+                message-type="Warning"/>
         <engine:Toggle name="skip-copyright-agreement-toggle"
-                       text="Skip copyright agreement dialog" />
-        <engine:Label class="section-title" text="Settings require Reload SDK" />
+                       text="Skip copyright agreement dialog"/>
+        <engine:Label class="section-title" text="Settings require Reload SDK"/>
         <engine:HelpBox text="Change following settings require reload VRChat SDK" message-type="Warning"/>
         <engine:Toggle name="replace-upload-url-toggle"
-                       text="Replace 'vrchat.com' in upload url to 'api.vrchat.cloud' when upload" />
-        <engine:Button name="reload-sdk-button" text="Reload VRChat SDK" />
+                       text="Replace 'vrchat.com' in upload url to 'api.vrchat.cloud' when upload"/>
+        <engine:Button name="reload-sdk-button" text="Reload VRChat SDK"/>
     </engine:VisualElement>
 </engine:UXML>

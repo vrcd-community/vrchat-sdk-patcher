@@ -1,20 +1,20 @@
 {
-    "name": "VRCD.VRChatPackages.VRChatSDKPatcher.Worlds.Editor",
-    "rootNamespace": "VRCD.VRChatPackages.VRChatSDKPatcher.Worlds.Editor",
-    "references": [
-        "VRC.SDKBase.Editor",
-        "VRC.SDK3.Editor",
-        "VRCD.VRChatPackages.VRChatSDKPatcher.Editor"
-    ],
-    "includePlatforms": [
-        "Editor"
-    ],
-    "excludePlatforms": [],
-    "allowUnsafeCode": false,
-    "overrideReferences": false,
-    "precompiledReferences": [],
-    "autoReferenced": true,
-    "defineConstraints": [],
-    "versionDefines": [],
-    "noEngineReferences": false
+  "name": "VRCD.VRChatPackages.VRChatSDKPatcher.Worlds.Editor",
+  "rootNamespace": "VRCD.VRChatPackages.VRChatSDKPatcher.Worlds.Editor",
+  "references": [
+    "VRC.SDKBase.Editor",
+    "VRC.SDK3.Editor",
+    "VRCD.VRChatPackages.VRChatSDKPatcher.Editor"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "precompiledReferences": [],
+  "autoReferenced": true,
+  "defineConstraints": [],
+  "versionDefines": [],
+  "noEngineReferences": false
 }

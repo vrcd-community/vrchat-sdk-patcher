@@ -1,9 +1,8 @@
 ﻿using HarmonyLib;
 
-namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers
+namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers;
+
+internal interface IPatcher
 {
-    internal interface IPatcher
-    {
-        public void Patch(Harmony harmony);
-    }
+    public void Patch(Harmony harmony);
 }

@@ -69,9 +69,7 @@ internal static class WorldBuildActionUtils
             Debug.LogError("Open SDK Builder Panel First");
             if (EditorUtility.DisplayDialog("Open SDK Builder Panel First",
                     "Please Open SDK Builder Panel First", "Open SDK Builder Panel", "Cancel"))
-            {
                 SdkPanelUtils.OpenSdkPanelGuard();
-            }
 
             return null;
         }

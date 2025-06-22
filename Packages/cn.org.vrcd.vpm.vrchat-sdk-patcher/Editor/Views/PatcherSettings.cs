@@ -4,108 +4,109 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using VRC.SDKBase.Editor.Source.Helpers;
 
-namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Editor.Views
+namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Editor.Views;
+
+public class PatcherSettings : EditorWindow
 {
-    public class PatcherSettings : EditorWindow
+    [SerializeField] private VisualTreeAsset m_VisualTreeAsset;
+
+    private TextField _httpProxyUriField;
+    private HelpBox _proxySystemHelpBox;
+
+    private HelpBox _proxyUriValidationHelpBox;
+
+    private Button _reloadSdkButton;
+
+    private Toggle _replaceUploadUrlToggle;
+
+    private Settings _settings;
+    private Toggle _skipCopyrightAgreementToggle;
+    private Toggle _useProxyToggle;
+
+    public void CreateGUI()
     {
-        [SerializeField] private VisualTreeAsset m_VisualTreeAsset = default;
+        var root = rootVisualElement;
+        var content = m_VisualTreeAsset.Instantiate();
 
-        private Settings _settings;
+        root.Add(content);
 
-        private TextField _httpProxyUriField;
-        private Toggle _useProxyToggle;
+        minSize = new Vector2(430, 600);
 
-        private Toggle _replaceUploadUrlToggle;
-        private Toggle _skipCopyrightAgreementToggle;
+        _httpProxyUriField = content.Query<TextField>("proxy-uri-field").First();
+        _useProxyToggle = content.Query<Toggle>("proxy-toggle").First();
 
-        private Button _reloadSdkButton;
+        _replaceUploadUrlToggle = content.Query<Toggle>("replace-upload-url-toggle").First();
+        _skipCopyrightAgreementToggle = content.Query<Toggle>("skip-copyright-agreement-toggle").First();
 
-        private HelpBox _proxyUriValidationHelpBox;
-        private HelpBox _proxySystemHelpBox;
+        _reloadSdkButton = content.Query<Button>("reload-sdk-button").First();
 
-        [MenuItem("VRChat SDK Patcher/Settings")]
-        public static void ShowSettings()
-        {
-            var window = GetWindow<PatcherSettings>();
-            window.titleContent = new GUIContent("VRChat SDK Patcher Settings");
-        }
+        _proxyUriValidationHelpBox = content.Query<HelpBox>("proxy-uri-validation").First();
+        _proxySystemHelpBox = content.Query<HelpBox>("proxy-system").First();
 
-        public void CreateGUI()
-        {
-            var root = rootVisualElement;
-            var content = m_VisualTreeAsset.Instantiate();
+        LoadSettings();
 
-            root.Add(content);
+        _httpProxyUriField.RegisterValueChangedCallback(_ => SaveSettings());
+        _useProxyToggle.RegisterValueChangedCallback(_ => SaveSettings());
 
-            minSize = new Vector2(430, 600);
+        _replaceUploadUrlToggle.RegisterValueChangedCallback(_ => SaveSettings());
 
-            _httpProxyUriField = content.Query<TextField>("proxy-uri-field").First();
-            _useProxyToggle = content.Query<Toggle>("proxy-toggle").First();
+        _skipCopyrightAgreementToggle.RegisterValueChangedCallback(_ => SaveSettings());
 
-            _replaceUploadUrlToggle = content.Query<Toggle>("replace-upload-url-toggle").First();
-            _skipCopyrightAgreementToggle = content.Query<Toggle>("skip-copyright-agreement-toggle").First();
+        _reloadSdkButton.clicked += () => ReloadUtil.ReloadSDK();
+    }
 
-            _reloadSdkButton = content.Query<Button>("reload-sdk-button").First();
+    [MenuItem("VRChat SDK Patcher/Settings")]
+    public static void ShowSettings()
+    {
+        var window = GetWindow<PatcherSettings>();
+        window.titleContent = new GUIContent("VRChat SDK Patcher Settings");
+    }
 
-            _proxyUriValidationHelpBox = content.Query<HelpBox>("proxy-uri-validation").First();
-            _proxySystemHelpBox = content.Query<HelpBox>("proxy-system").First();
+    private void LoadSettings()
+    {
+        _settings = PatcherMain.PatcherSettings;
 
-            LoadSettings();
+        _useProxyToggle.value = _settings.UseProxy;
+        _httpProxyUriField.value = _settings.HttpProxyUri;
 
-            _httpProxyUriField.RegisterValueChangedCallback(_ => SaveSettings());
-            _useProxyToggle.RegisterValueChangedCallback(_ => SaveSettings());
+        _replaceUploadUrlToggle.value = _settings.ReplaceUploadUrl;
+        _skipCopyrightAgreementToggle.value = _settings.SkipCopyrightAgreement;
 
-            _replaceUploadUrlToggle.RegisterValueChangedCallback(_ => SaveSettings());
+        _proxyUriValidationHelpBox.style.display = !string.IsNullOrWhiteSpace(_settings.HttpProxyUri) &&
+                                                   !IsValidUri(_settings.HttpProxyUri)
+            ? DisplayStyle.Flex
+            : DisplayStyle.None;
 
-            _skipCopyrightAgreementToggle.RegisterValueChangedCallback(_ => SaveSettings());
+        _proxySystemHelpBox.style.display = _settings.UseProxy && string.IsNullOrWhiteSpace(_settings.HttpProxyUri)
+            ? DisplayStyle.Flex
+            : DisplayStyle.None;
+    }
 
-            _reloadSdkButton.clicked += () => ReloadUtil.ReloadSDK();
-        }
+    private void SaveSettings()
+    {
+        _settings.UseProxy = _useProxyToggle.value;
+        _settings.HttpProxyUri = _httpProxyUriField.value;
 
-        private void LoadSettings()
-        {
-            _settings = PatcherMain.PatcherSettings;
+        _settings.ReplaceUploadUrl = _replaceUploadUrlToggle.value;
+        _settings.SkipCopyrightAgreement = _skipCopyrightAgreementToggle.value;
 
-            _useProxyToggle.value = _settings.UseProxy;
-            _httpProxyUriField.value = _settings.HttpProxyUri;
+        _proxyUriValidationHelpBox.style.display = !string.IsNullOrWhiteSpace(_settings.HttpProxyUri) &&
+                                                   !IsValidUri(_settings.HttpProxyUri)
+            ? DisplayStyle.Flex
+            : DisplayStyle.None;
 
-            _replaceUploadUrlToggle.value = _settings.ReplaceUploadUrl;
-            _skipCopyrightAgreementToggle.value = _settings.SkipCopyrightAgreement;
+        _proxySystemHelpBox.style.display = _settings.UseProxy && string.IsNullOrWhiteSpace(_settings.HttpProxyUri)
+            ? DisplayStyle.Flex
+            : DisplayStyle.None;
 
-            _proxyUriValidationHelpBox.style.display = !string.IsNullOrWhiteSpace(_settings.HttpProxyUri) && !IsValidUri(_settings.HttpProxyUri)
-                ? DisplayStyle.Flex
-                : DisplayStyle.None;
+        _settings.Save();
+    }
 
-            _proxySystemHelpBox.style.display = _settings.UseProxy && string.IsNullOrWhiteSpace(_settings.HttpProxyUri)
-                ? DisplayStyle.Flex
-                : DisplayStyle.None;
-        }
+    private static bool IsValidUri(string uri)
+    {
+        if (!Uri.TryCreate(uri, UriKind.Absolute, out var url))
+            return false;
 
-        private void SaveSettings()
-        {
-            _settings.UseProxy = _useProxyToggle.value;
-            _settings.HttpProxyUri = _httpProxyUriField.value;
-
-            _settings.ReplaceUploadUrl = _replaceUploadUrlToggle.value;
-            _settings.SkipCopyrightAgreement = _skipCopyrightAgreementToggle.value;
-
-            _proxyUriValidationHelpBox.style.display = !string.IsNullOrWhiteSpace(_settings.HttpProxyUri) && !IsValidUri(_settings.HttpProxyUri)
-                ? DisplayStyle.Flex
-                : DisplayStyle.None;
-
-            _proxySystemHelpBox.style.display = _settings.UseProxy && string.IsNullOrWhiteSpace(_settings.HttpProxyUri)
-                ? DisplayStyle.Flex
-                : DisplayStyle.None;
-
-            _settings.Save();
-        }
-
-        private static bool IsValidUri(string uri)
-        {
-            if (!Uri.TryCreate(uri, UriKind.Absolute, out var url))
-                return false;
-
-            return url.Scheme == Uri.UriSchemeHttp || url.Scheme == Uri.UriSchemeHttps;
-        }
+        return url.Scheme == Uri.UriSchemeHttp || url.Scheme == Uri.UriSchemeHttps;
     }
 }

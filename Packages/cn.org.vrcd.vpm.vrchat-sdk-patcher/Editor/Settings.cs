@@ -1,56 +1,54 @@
 ﻿using System.IO;
-using System.Reflection;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor
+namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor;
+
+public class Settings
 {
-    public class Settings
+    public const string SettingsFileName = "settings.json";
+    public bool UseProxy { get; set; } = true;
+    public string HttpProxyUri { get; set; } = "";
+
+    public bool ReplaceUploadUrl { get; set; }
+    public bool SkipCopyrightAgreement { get; set; }
+
+    public static Settings LoadSettings()
     {
-        public bool UseProxy { get; set; } = true;
-        public string HttpProxyUri { get; set; } = "";
+        var basePath = GetSettingsBasePath();
+        var path = Path.Combine(basePath, SettingsFileName);
 
-        public bool ReplaceUploadUrl { get; set; }
-        public bool SkipCopyrightAgreement { get; set; }
-
-        public const string SettingsFileName = "settings.json";
-
-        public static Settings LoadSettings()
+        if (!File.Exists(path))
         {
-            var basePath = GetSettingsBasePath();
-            var path = Path.Combine(basePath, SettingsFileName);
+            if (!Directory.Exists(basePath))
+                Directory.CreateDirectory(basePath);
 
-            if (!File.Exists(path))
-            {
-                if (!Directory.Exists(basePath))
-                    Directory.CreateDirectory(basePath);
+            var emptySettings = new Settings();
+            File.WriteAllText(path, JsonConvert.SerializeObject(emptySettings));
 
-                var emptySettings = new Settings();
-                File.WriteAllText(path, JsonConvert.SerializeObject(emptySettings));
-
-                return emptySettings;
-            }
-
-            var rawSettingsJson = File.ReadAllText(path);
-            var settings = JsonConvert.DeserializeObject<Settings>(rawSettingsJson);
-
-            return settings;
+            return emptySettings;
         }
 
-        public void Save()
-        {
-            var path = GetSettingsPath();
-            File.WriteAllText(path, JsonConvert.SerializeObject(this));
-        }
+        var rawSettingsJson = File.ReadAllText(path);
+        var settings = JsonConvert.DeserializeObject<Settings>(rawSettingsJson);
 
-        public static string GetSettingsPath()
-        {
-            return Path.Combine(GetSettingsBasePath(), SettingsFileName);
-        }
+        return settings;
+    }
 
-        public static string GetSettingsBasePath()
-        {
-            return Path.Combine(new DirectoryInfo(Application.dataPath).Parent?.FullName, "ProjectSettings", "Packages", "cn.org.vrcd.vpm.vrchat-sdk-patcher");
-        }
+    public void Save()
+    {
+        var path = GetSettingsPath();
+        File.WriteAllText(path, JsonConvert.SerializeObject(this));
+    }
+
+    public static string GetSettingsPath()
+    {
+        return Path.Combine(GetSettingsBasePath(), SettingsFileName);
+    }
+
+    public static string GetSettingsBasePath()
+    {
+        return Path.Combine(new DirectoryInfo(Application.dataPath).Parent?.FullName, "ProjectSettings", "Packages",
+            "cn.org.vrcd.vpm.vrchat-sdk-patcher");
     }
 }

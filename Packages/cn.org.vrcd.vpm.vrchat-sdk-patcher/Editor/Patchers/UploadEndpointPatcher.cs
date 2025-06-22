@@ -1,89 +1,80 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using HarmonyLib;
-using UnityEngine;
 using VRC.SDKBase.Editor.Api;
 
-namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers
+namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers;
+
+internal class UploadEndpointPatcher : IPatcher
 {
-    internal class UploadEndpointPatcher : IPatcher
+    private readonly MethodInfo _uploadSimpleMethodInfo = GetUploadSimpleMethod();
+
+    public void Patch(Harmony harmony)
     {
-        private MethodInfo _uploadSimpleMethodInfo = GetUploadSimpleMethod();
+        if (!PatcherMain.PatcherSettings.ReplaceUploadUrl)
+            return;
 
-        public UploadEndpointPatcher()
+        var transpilerMethod =
+            typeof(UploadEndpointPatcher).GetMethod(nameof(Transpiler),
+                BindingFlags.Static | BindingFlags.NonPublic);
+
+        harmony.Patch(_uploadSimpleMethodInfo, transpiler: new HarmonyMethod(transpilerMethod));
+    }
+
+    private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
+    {
+        var codes = new List<CodeInstruction>(instructions);
+
+        var isValueArgCodeFound = false;
+        var insertIndex = -1;
+        FieldInfo uploadUrlField = null;
+        for (var index = 0; index < codes.Count; index++)
         {
-        }
-
-        private static IEnumerable<CodeInstruction> Transpiler(IEnumerable<CodeInstruction> instructions)
-        {
-            var codes = new List<CodeInstruction>(instructions);
-
-            var isValueArgCodeFound = false;
-            var insertIndex = -1;
-            FieldInfo uploadUrlField = null;
-            for (var index = 0; index < codes.Count; index++)
+            var code = codes[index];
+            if (isValueArgCodeFound)
             {
-                var code = codes[index];
-                if (isValueArgCodeFound)
-                {
-                    if (code.opcode != OpCodes.Stfld)
-                        continue;
+                if (code.opcode != OpCodes.Stfld)
+                    continue;
 
-                    if (code.operand is FieldInfo field && field.Name.Contains("<uploadUrl>"))
-                    {
-                        insertIndex = index;
-                        uploadUrlField = field;
-                        break;
-                    }
-                }
-
-                if (code.opcode == OpCodes.Ldstr && code.operand is "url")
+                if (code.operand is FieldInfo field && field.Name.Contains("<uploadUrl>"))
                 {
-                    isValueArgCodeFound = true;
+                    insertIndex = index;
+                    uploadUrlField = field;
+                    break;
                 }
             }
 
-            // uploadUrl = uploadUrl.Replace("//vrchat.com", "//api.vrchat.cloud");
-
-            var instructionsToInsert = new List<CodeInstruction>();
-            instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldarg_0));
-            instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldarg_0));
-            instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldfld, uploadUrlField));
-            instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldstr, "//vrchat.com"));
-            instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldstr, "//api.vrchat.cloud"));
-            instructionsToInsert.Add(new CodeInstruction(OpCodes.Callvirt, AccessTools.Method(typeof(String), nameof(string.Replace), new Type[] {typeof(string), typeof(string)})));
-            instructionsToInsert.Add(new CodeInstruction(OpCodes.Stfld, uploadUrlField));
-
-            codes.InsertRange(insertIndex + 1, instructionsToInsert);
-
-            return codes;
+            if (code.opcode == OpCodes.Ldstr && code.operand is "url") isValueArgCodeFound = true;
         }
 
-        private static MethodInfo GetUploadSimpleMethod()
-        {
-            var uploadSimpleMethod =
-                typeof(VRCApi).GetMethod("UploadSimple", BindingFlags.NonPublic | BindingFlags.Static);
+        // uploadUrl = uploadUrl.Replace("//vrchat.com", "//api.vrchat.cloud");
 
-            var stateMachineAttr = uploadSimpleMethod.GetCustomAttribute<AsyncStateMachineAttribute>();
-            var moveNextMethod =
-                stateMachineAttr.StateMachineType.GetMethod("MoveNext", BindingFlags.NonPublic | BindingFlags.Instance);
+        var instructionsToInsert = new List<CodeInstruction>();
+        instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldarg_0));
+        instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldarg_0));
+        instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldfld, uploadUrlField));
+        instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldstr, "//vrchat.com"));
+        instructionsToInsert.Add(new CodeInstruction(OpCodes.Ldstr, "//api.vrchat.cloud"));
+        instructionsToInsert.Add(new CodeInstruction(OpCodes.Callvirt,
+            AccessTools.Method(typeof(string), nameof(string.Replace), new[] { typeof(string), typeof(string) })));
+        instructionsToInsert.Add(new CodeInstruction(OpCodes.Stfld, uploadUrlField));
 
-            return moveNextMethod;
-        }
+        codes.InsertRange(insertIndex + 1, instructionsToInsert);
 
-        public void Patch(Harmony harmony)
-        {
-            if (!PatcherMain.PatcherSettings.ReplaceUploadUrl)
-                return;
+        return codes;
+    }
 
-            var transpilerMethod =
-                typeof(UploadEndpointPatcher).GetMethod(nameof(Transpiler),
-                    BindingFlags.Static | BindingFlags.NonPublic);
+    private static MethodInfo GetUploadSimpleMethod()
+    {
+        var uploadSimpleMethod =
+            typeof(VRCApi).GetMethod("UploadSimple", BindingFlags.NonPublic | BindingFlags.Static);
 
-            harmony.Patch(_uploadSimpleMethodInfo, transpiler: new HarmonyMethod(transpilerMethod));
-        }
+        var stateMachineAttr = uploadSimpleMethod.GetCustomAttribute<AsyncStateMachineAttribute>();
+        var moveNextMethod =
+            stateMachineAttr.StateMachineType.GetMethod("MoveNext", BindingFlags.NonPublic | BindingFlags.Instance);
+
+        return moveNextMethod;
     }
 }

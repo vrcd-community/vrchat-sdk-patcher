@@ -1,9 +1,8 @@
 ﻿using JetBrains.Annotations;
 
-namespace VRCD.VRChatPackages.VRChatSDKPatcher.Worlds.Editor
+namespace VRCD.VRChatPackages.VRChatSDKPatcher.Worlds.Editor;
+
+[PublicAPI]
+internal abstract class PatcherLocator
 {
-    [PublicAPI]
-    internal abstract class PatcherLocator
-    {
-    }
 }
