@@ -8,8 +8,6 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Editor.Views;
 
 public class PatcherSettings : EditorWindow
 {
-    [SerializeField] private VisualTreeAsset m_VisualTreeAsset;
-
     private TextField _httpProxyUriField;
     private HelpBox _proxySystemHelpBox;
 
@@ -23,10 +21,13 @@ public class PatcherSettings : EditorWindow
     private Toggle _skipCopyrightAgreementToggle;
     private Toggle _useProxyToggle;
 
+    private const string VisualTreeAssetPath = "Packages/cn.org.vrcd.vpm.vrchat-sdk-patcher/Editor/Views/PatcherSettings.uxml";
+
     public void CreateGUI()
     {
         var root = rootVisualElement;
-        var content = m_VisualTreeAsset.Instantiate();
+        var visualTreeAsset = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>(VisualTreeAssetPath);
+        var content = visualTreeAsset.Instantiate();
 
         root.Add(content);
 
