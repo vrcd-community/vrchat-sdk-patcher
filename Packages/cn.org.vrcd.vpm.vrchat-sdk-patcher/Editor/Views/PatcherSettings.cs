@@ -20,6 +20,8 @@ public class PatcherSettings : EditorWindow
     private Settings _settings;
     private Toggle _skipCopyrightAgreementToggle;
     private Toggle _useProxyToggle;
+    
+    private Toggle _cacheRemoteConfigToggle;
 
     private const string VisualTreeAssetPath = "Packages/cn.org.vrcd.vpm.vrchat-sdk-patcher/Editor/Views/PatcherSettings.uxml";
 
@@ -43,6 +45,8 @@ public class PatcherSettings : EditorWindow
 
         _proxyUriValidationHelpBox = content.Query<HelpBox>("proxy-uri-validation").First();
         _proxySystemHelpBox = content.Query<HelpBox>("proxy-system").First();
+        
+        _cacheRemoteConfigToggle = content.Query<Toggle>("cache-remote-config-toggle").First();
 
         LoadSettings();
 
@@ -52,6 +56,8 @@ public class PatcherSettings : EditorWindow
         _replaceUploadUrlToggle.RegisterValueChangedCallback(_ => SaveSettings());
 
         _skipCopyrightAgreementToggle.RegisterValueChangedCallback(_ => SaveSettings());
+        
+        _cacheRemoteConfigToggle.RegisterValueChangedCallback(_ => SaveSettings());
 
         _reloadSdkButton.clicked += () => ReloadUtil.ReloadSDK();
     }
@@ -72,6 +78,8 @@ public class PatcherSettings : EditorWindow
 
         _replaceUploadUrlToggle.value = _settings.ReplaceUploadUrl;
         _skipCopyrightAgreementToggle.value = _settings.SkipCopyrightAgreement;
+        
+        _cacheRemoteConfigToggle.value = _settings.CacheRemoteConfig;
 
         _proxyUriValidationHelpBox.style.display = !string.IsNullOrWhiteSpace(_settings.HttpProxyUri) &&
                                                    !IsValidUri(_settings.HttpProxyUri)
@@ -90,6 +98,8 @@ public class PatcherSettings : EditorWindow
 
         _settings.ReplaceUploadUrl = _replaceUploadUrlToggle.value;
         _settings.SkipCopyrightAgreement = _skipCopyrightAgreementToggle.value;
+        
+        _settings.CacheRemoteConfig = _cacheRemoteConfigToggle.value;
 
         _proxyUriValidationHelpBox.style.display = !string.IsNullOrWhiteSpace(_settings.HttpProxyUri) &&
                                                    !IsValidUri(_settings.HttpProxyUri)

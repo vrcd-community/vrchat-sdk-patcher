@@ -12,6 +12,8 @@ public class Settings
 
     public bool ReplaceUploadUrl { get; set; }
     public bool SkipCopyrightAgreement { get; set; }
+    
+    public bool CacheRemoteConfig { get; set; }
 
     public static Settings LoadSettings()
     {

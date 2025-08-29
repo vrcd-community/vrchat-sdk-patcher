@@ -24,6 +24,8 @@
         <engine:HelpBox name="proxy-uri-validation" message-type="Error"
                         text="Invalid URI format. Please enter a valid HTTP or HTTPS URL."/>
         <engine:Label class="section-title" text="Others"/>
+        <engine:Toggle name="cache-remote-config-toggle"
+                       text="Cache remote config"/>
         <engine:HelpBox
                 text="By using this patch, you agree that you have already read and accepted the VRChat copyright agreement."
                 message-type="Warning"/>
