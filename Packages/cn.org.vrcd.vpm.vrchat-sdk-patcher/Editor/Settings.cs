@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using Newtonsoft.Json;
 using UnityEngine;
 
@@ -50,7 +51,28 @@ public class Settings
 
     public static string GetSettingsBasePath()
     {
-        return Path.Combine(new DirectoryInfo(Application.dataPath).Parent?.FullName, "ProjectSettings", "Packages",
+        return Path.Combine(GetProjectPath(), "ProjectSettings", "Packages",
             "cn.org.vrcd.vpm.vrchat-sdk-patcher");
+    }
+
+    public static string GetProjectWideCachePath()
+    {
+        var path = Path.Combine(GetProjectPath(), "Library/vrchat-sdk-patcher-a4d72eee/");
+        if (!Directory.Exists(path))
+            Directory.CreateDirectory(path);
+        
+        return path;
+    }
+
+    public static string GetProjectPath()
+    {
+        var parent = Directory.GetParent(Application.dataPath);
+        if (parent == null)
+        {
+            // Thanks for inverting a "nice" workaround for getting project path, Unity.
+            throw new InvalidOperationException("Failed to get project path");
+        }
+        
+        return parent.ToString();
     }
 }

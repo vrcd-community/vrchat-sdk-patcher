@@ -53,9 +53,9 @@ internal class RemoteConfigCachePatcher : IPatcher
             return true;
         }
 
-        var settingsBasePath = Settings.GetSettingsBasePath();
-        var apiSettingsCachePath = Path.Combine(settingsBasePath, ApiConfigCacheFileName);
-        var apiSettingsCacheTimestampPath = Path.Combine(settingsBasePath, ApiConfigCacheTimestampFileName);
+        var cacheBasePath = Settings.GetProjectWideCachePath();
+        var apiSettingsCachePath = Path.Combine(cacheBasePath, ApiConfigCacheFileName);
+        var apiSettingsCacheTimestampPath = Path.Combine(cacheBasePath, ApiConfigCacheTimestampFileName);
 
         if (TryGetCachedConfig() is { } cachedConfig)
         {
@@ -110,9 +110,9 @@ internal class RemoteConfigCachePatcher : IPatcher
 
     private static Dictionary<string, object>? TryGetCachedConfig()
     {
-        var settingsBasePath = Settings.GetSettingsBasePath();
-        var apiSettingsCachePath = Path.Combine(settingsBasePath, ApiConfigCacheFileName);
-        var apiSettingsCacheTimestampPath = Path.Combine(settingsBasePath, ApiConfigCacheTimestampFileName);
+        var cacheBasePath = Settings.GetProjectWideCachePath();
+        var apiSettingsCachePath = Path.Combine(cacheBasePath, ApiConfigCacheFileName);
+        var apiSettingsCacheTimestampPath = Path.Combine(cacheBasePath, ApiConfigCacheTimestampFileName);
 
         if (!File.Exists(apiSettingsCachePath) || !File.Exists(apiSettingsCacheTimestampPath))
         {
