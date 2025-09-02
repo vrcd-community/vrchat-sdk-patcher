@@ -97,7 +97,16 @@ internal class RemoteConfigCachePatcher : IPatcher
         responseContainer.OnError += container =>
         {
             Debug.LogError(
-                $"[VRChat SDK Patcher]Failed to fetch api config file, will use cached version if available. (code: {container.Code} msg: {container.Text} err: {container.Error})");
+                $"[VRChat SDK Patcher] Failed to fetch api config file, will use cached version if available. (code: {container.Code} msg: {container.Text} err: {container.Error})");
+
+            var rawConfig = TryGetCachedConfig();
+            if (rawConfig is not null)
+            {
+                Debug.Log("[VRChat SDK Patcher] Using stale cached api config file due to fetch error.");
+#pragma warning disable CS8602
+                ConfigField.SetValue(__instance, rawConfig);
+#pragma warning restore CS8602
+            }
 
             onError?.Invoke();
         };
@@ -108,7 +117,7 @@ internal class RemoteConfigCachePatcher : IPatcher
         return false;
     }
 
-    private static Dictionary<string, object>? TryGetCachedConfig()
+    private static Dictionary<string, object>? TryGetCachedConfig(bool ignoreExpiry = false)
     {
         var cacheBasePath = Settings.GetProjectWideCachePath();
         var apiSettingsCachePath = Path.Combine(cacheBasePath, ApiConfigCacheFileName);
@@ -128,13 +137,20 @@ internal class RemoteConfigCachePatcher : IPatcher
             return null;
         }
 
-        var currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
-        var age = currentTime - timestamp;
-
-        if (age >= CacheValiditySeconds)
+        if (!ignoreExpiry)
         {
-            Debug.Log("[VRChat SDK Patcher] Cached api config file is stale, fetching new one.");
-            return null;
+            var currentTime = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            var age = currentTime - timestamp;
+
+            if (age >= CacheValiditySeconds)
+            {
+                Debug.Log("[VRChat SDK Patcher] Cached api config file is stale, fetching new one.");
+                return null;
+            }   
+        }
+        else
+        {
+            Debug.Log("[VRChat SDK Patcher] Ignoring cache expiry as requested.");
         }
 
         var configRaw = File.ReadAllText(apiSettingsCachePath);
