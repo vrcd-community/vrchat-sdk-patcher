@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Reflection;
 using HarmonyLib;
 using JetBrains.Annotations;
+using VRC.Core;
 using VRC.SDKBase.Editor.Api;
 
 namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers;
@@ -12,13 +13,20 @@ namespace VRCD.VRChatPackages.VRChatSDKPatcher.Editor.Patchers;
 [HarmonyPatch(typeof(VRCApi), "GetClient")]
 internal class UseProxyPatcher
 {
-    [CanBeNull] private static HttpClient _httpClient;
-    [CanBeNull] private static HttpClientHandler _httpClientHandler;
+    private static HttpClient? _httpClient;
+    private static HttpClientHandler? _httpClientHandler;
 
     private static bool Prefix(ref HttpClient __result, string url)
     {
         if (_httpClient != null && _httpClientHandler != null)
         {
+            var cookieBaseUrl = GetVrcCookieBaseUrl();
+            var authCookie = ApiCredentials.GetAuthTokenCookie();
+            var twoFactorAuthToken = ApiCredentials.GetTwoFactorAuthTokenCookie();
+            
+            _httpClientHandler.CookieContainer.Add(cookieBaseUrl, new Cookie(authCookie.Name, authCookie.Value));
+            _httpClientHandler.CookieContainer.Add(cookieBaseUrl, new Cookie(twoFactorAuthToken.Name, twoFactorAuthToken.Value));
+            
             __result = _httpClient;
             return false;
         }
