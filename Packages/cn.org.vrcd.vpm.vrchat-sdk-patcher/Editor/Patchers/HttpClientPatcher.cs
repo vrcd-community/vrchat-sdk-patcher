@@ -38,11 +38,10 @@ internal class UseProxyPatcher
         var cookies = GetCookies();
         var handler = new HttpClientHandler
         {
-            UseProxy = PatcherMain.PatcherSettings.UseProxy,
-            CookieContainer = cookies
+            UseProxy = true,
+            CookieContainer = cookies,
+            Proxy = new PatcherWebProxy()
         };
-
-        handler.Proxy = new PatcherWebProxy();
 
         var httpClient = new HttpClient(handler);
 
