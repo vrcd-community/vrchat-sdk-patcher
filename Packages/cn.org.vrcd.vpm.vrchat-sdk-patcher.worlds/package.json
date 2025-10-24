@@ -1,9 +1,9 @@
 {
   "name": "cn.org.vrcd.vpm.vrchat-sdk-patcher.worlds",
-  "displayName": "VRChat SDK Patcher - Worlds",
-  "version": "0.6.4",
+  "displayName": "[No longer supported] VRChat SDK Patcher - Worlds",
+  "version": "0.6.5",
   "hideInEditor": false,
-  "description": "提供一系列改进 VRChat SDK 使用体验（主要针对于网络）的补丁。",
+  "description": "[No longer supported/停止维护] 提供一系列改进 VRChat SDK 使用体验（主要针对于网络）的补丁。",
   "unity": "2022.3",
   "author": {
     "email": "us@vrcd.org.cn",
@@ -19,6 +19,6 @@
   ],
   "vpmDependencies": {
     "com.vrchat.worlds": "^3.5.0",
-    "cn.org.vrcd.vpm.vrchat-sdk-patcher": "0.6.4"
+    "cn.org.vrcd.vpm.vrchat-sdk-patcher": "0.6.5"
   }
 }
