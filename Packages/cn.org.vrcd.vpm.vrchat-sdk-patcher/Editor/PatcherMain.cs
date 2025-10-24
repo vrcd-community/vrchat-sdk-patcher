@@ -18,7 +18,8 @@ internal class PatcherMain
 
     static PatcherMain()
     {
-        Debug.LogWarning("[VRChat SDK Patcher] VRChat SDK Patcher 现已停止维护，不建议继续使用，感谢您的一路陪伴。VRChat SDK Patcher are no longer supported and not recommend to use, thanks you for your support.")
+        Debug.LogWarning(
+            "[VRChat SDK Patcher] VRChat SDK Patcher 现已停止维护，不建议继续使用，感谢您的一路陪伴。VRChat SDK Patcher are no longer supported and not recommend to use, thanks you for your support.");
 
         PatcherSettings = Settings.LoadSettings();
 
@@ -53,5 +54,8 @@ internal class PatcherMain
         }
 
         Debug.Log("Patcher Loaded!");
+
+        Debug.LogWarning(
+            "[VRChat SDK Patcher] VRChat SDK Patcher 现已停止维护，不建议继续使用，感谢您的一路陪伴。VRChat SDK Patcher are no longer supported and not recommend to use, thanks you for your support.");
     }
 }

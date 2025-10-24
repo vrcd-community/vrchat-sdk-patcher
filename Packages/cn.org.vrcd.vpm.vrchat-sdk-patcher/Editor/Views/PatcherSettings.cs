@@ -62,7 +62,9 @@ public class PatcherSettings : EditorWindow
         _reloadSdkButton.clicked += () => ReloadUtil.ReloadSDK();
     }
 
-    [MenuItem("VRChat SDK Patcher/Settings")]
+    [MenuItem("VRChat SDK Patcher (No longer supported)/Settings")]
+    [MenuItem("VRChat SDK Patcher (No longer supported)/VRChat SDK Patcher 现已停止维护，不建议继续使用，感谢您的一路陪伴。")]
+    [MenuItem("VRChat SDK Patcher (No longer supported)/VRChat SDK Patcher are no longer supported and not recommend to use, thanks you for your support.")]
     public static void ShowSettings()
     {
         var window = GetWindow<PatcherSettings>();
