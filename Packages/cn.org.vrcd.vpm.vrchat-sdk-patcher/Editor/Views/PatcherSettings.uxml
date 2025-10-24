@@ -10,7 +10,9 @@
     <engine:VisualElement class="settings-container">
         <engine:Label class="section-title" text="VRChat SDK Patcher"/>
         <engine:HelpBox text="Use at your own risk!" message-type="Warning"/>
-        <engine:Label text="Made With Love!"/>
+        <engine:HelpBox
+                text="[VRChat SDK Patcher] VRChat SDK Patcher 现已停止维护，不建议继续使用，感谢您的一路陪伴。\nVRChat SDK Patcher are no longer supported and not recommend to use, thanks you for your support."
+                message-type="Warning"/>
         <engine:Label class="section-title" text="Http Proxy Settings"/>
         <engine:HelpBox
                 text="Turn on Use Proxy Toggle with empty Proxy Uri will use system proxy settings (If you are using Linux, it only follow env var `HTTP_PROXY` `http_proxy` `no_proxy` `NO_PROXY`)"

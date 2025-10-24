@@ -1,6 +1,8 @@
 # VRChat SDK Patcher
 
-> W.I.P
+**VRChat SDK Patcher 现已停止维护，不建议继续使用，感谢您的一路陪伴。**
+
+**VRChat SDK Patcher are no longer supported and not recommend to use, thanks you for your support.**
 
 提供一系列改进 VRChat SDK 使用体验（主要针对于网络）的补丁。
 
