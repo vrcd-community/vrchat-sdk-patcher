@@ -1,7 +1,7 @@
 {
     "name": "cn.org.vrcd.vpm.vrchat-sdk-patcher.avatars",
     "displayName": "[No longer supported] VRChat SDK Patcher - Avatars",
-    "version": "0.6.6",
+    "version": "0.6.7",
     "hideInEditor": false,
     "description": "[No longer supported/停止维护] 提供一系列改进 VRChat SDK 使用体验（主要针对于网络）的补丁。",
     "unity": "2022.3",
