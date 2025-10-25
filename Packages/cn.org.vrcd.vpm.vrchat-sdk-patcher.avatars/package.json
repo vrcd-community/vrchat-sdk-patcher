@@ -19,6 +19,6 @@
     ],
     "vpmDependencies": {
         "com.vrchat.avatars": "^3.5.0",
-        "cn.org.vrcd.vpm.vrchat-sdk-patcher": "0.6.6"
+        "cn.org.vrcd.vpm.vrchat-sdk-patcher": "0.6.7"
     }
 }
